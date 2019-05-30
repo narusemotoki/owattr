@@ -1,6 +1,8 @@
 from typing import (
+    Any,
     Callable,
     Dict,
+    Type,
 )
 
 __all__ = ['from_dict']
@@ -29,5 +31,17 @@ def from_dict(target_object: object, new_attrs: Dict[str, str]) -> None:
         if isinstance(original_attr, Callable):  # type: ignore
             continue
 
-        Type = type(original_attr)
-        setattr(target_object, key, Type(new_attrs[key]))
+        new_attr = _cast_value(new_attrs[key], type(original_attr))
+        setattr(target_object, key, new_attr)
+
+
+def _cast_value(new_value: str, OriginalType: Type) -> Any:
+    # bool is a special case because bool('false') is True!
+    if OriginalType is bool:
+        if new_value in {'true', 'True'}:
+            return True
+        if new_value in {'', 'false', 'False'}:
+            return False
+        raise ValueError(new_value)
+
+    return OriginalType(new_value)
