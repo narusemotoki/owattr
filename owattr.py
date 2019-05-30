@@ -12,7 +12,7 @@ __credits__ = ["Motoki Naruse"]
 __email__ = "motoki@naru.se"
 __license__ = "MIT"
 __maintainer__ = "Motoki Naruse"
-__version__ = "0.9"
+__version__ = "0.10.0"
 
 
 def from_dict(target_object: object, new_attrs: Dict[str, str]) -> None:
